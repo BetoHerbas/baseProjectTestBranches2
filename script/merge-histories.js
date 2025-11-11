@@ -2,7 +2,7 @@ import fs from 'fs';
 import { getHistoryFilePaths } from './branch-utils.js';
 import { execSync } from 'child_process';
 
-function readJsonFile(filePath) {
+function readJsonFileFromFilesystem(filePath) {
   if (!fs.existsSync(filePath)) {
     return [];
   }
@@ -10,7 +10,19 @@ function readJsonFile(filePath) {
     const data = fs.readFileSync(filePath, 'utf8');
     return JSON.parse(data);
   } catch (error) {
-    console.error(`Error reading or parsing JSON file: ${filePath}`, error);
+    console.error(`Error reading or parsing JSON file from filesystem: ${filePath}`, error);
+    return [];
+  }
+}
+
+function readJsonFileFromBranch(branchName, filePath) {
+  try {
+    // Use git show to get the content of the file from the specified branch
+    const fileContent = execSync(`git show ${branchName}:${filePath}`, { encoding: 'utf8', stdio: 'pipe' });
+    return JSON.parse(fileContent);
+  } catch (error) {
+    // This error is expected if the file doesn't exist on the branch
+    console.log(`Info: File '${filePath}' not found on branch '${branchName}'. Assuming empty history.`);
     return [];
   }
 }
@@ -30,14 +42,17 @@ function mergeHistories(sourceBranch, targetBranch) {
   const targetPaths = getHistoryFilePaths(targetBranch);
 
   // --- COMMIT HISTORY MERGE ---
-  const sourceCommits = readJsonFile(sourcePaths.commitHistory);
-  const targetCommits = readJsonFile(targetPaths.commitHistory);
+  console.log('\n--- PROCESSING COMMIT HISTORY ---');
+  // Read source files directly from the git branch, not the filesystem
+  const sourceCommits = readJsonFileFromBranch(sourceBranch, sourcePaths.commitHistory);
+  // Read target files from the current filesystem
+  const targetCommits = readJsonFileFromFilesystem(targetPaths.commitHistory);
+  console.log(`Found ${sourceCommits.length} commits in source branch ('${sourceBranch}').`);
+  console.log(`Found ${targetCommits.length} commits in target branch ('${targetBranch}').`);
 
-  // Resolve the final "HEAD" commit from the source branch before merging
   const headIndex = sourceCommits.findIndex(c => c.sha === 'HEAD');
   if (headIndex > -1) {
     try {
-      console.log(`Resolving final commit for branch '${sourceBranch}'...`);
       const realSha = execSync(`git rev-parse ${sourceBranch}`, { encoding: 'utf8' }).trim();
       const headCommit = sourceCommits[headIndex];
       headCommit.sha = realSha;
@@ -45,10 +60,8 @@ function mergeHistories(sourceBranch, targetBranch) {
         const baseUrl = headCommit.commit.url.split('/commit/')[0];
         headCommit.commit.url = `${baseUrl}/commit/${realSha}`;
       }
-      console.log(`Resolved final commit to SHA: ${realSha}`);
     } catch (error) {
       console.error(`Could not resolve SHA for branch '${sourceBranch}'. Skipping HEAD commit.`, error);
-      // If resolution fails, remove the HEAD commit to avoid merging it
       sourceCommits.splice(headIndex, 1);
     }
   }
@@ -67,10 +80,12 @@ function mergeHistories(sourceBranch, targetBranch) {
   console.log(`Merged ${newCommits} new commits into '${targetPaths.commitHistory}'.`);
 
   // --- TDD LOG MERGE ---
-  const sourceTddLog = readJsonFile(sourcePaths.tddLog);
-  const targetTddLog = readJsonFile(targetPaths.tddLog);
+  console.log('\n--- PROCESSING TDD LOG ---');
+  const sourceTddLog = readJsonFileFromBranch(sourceBranch, sourcePaths.tddLog);
+  const targetTddLog = readJsonFileFromFilesystem(targetPaths.tddLog);
+  console.log(`Found ${sourceTddLog.length} TDD log entries in source branch ('${sourceBranch}').`);
+  console.log(`Found ${targetTddLog.length} TDD log entries in target branch ('${targetBranch}').`);
 
-  // Resolve the final "HEAD" commit in the TDD log as well
   const tddHeadIndex = sourceTddLog.findIndex(c => c.commitId === 'HEAD');
   if (tddHeadIndex > -1) {
     try {
@@ -97,18 +112,12 @@ function mergeHistories(sourceBranch, targetBranch) {
   console.log(`Merged ${newTddEntries} new TDD log entries into '${targetPaths.tddLog}'.`);
 
   // --- CLEANUP ---
-  try {
-    console.log(`Cleaning up history files for branch '${sourceBranch}'...`);
-    if (fs.existsSync(sourcePaths.commitHistory)) {
-      fs.unlinkSync(sourcePaths.commitHistory);
-    }
-    if (fs.existsSync(sourcePaths.tddLog)) {
-      fs.unlinkSync(sourcePaths.tddLog);
-    }
-    console.log('Cleanup complete.');
-  } catch (error) {
-    console.error(`Error cleaning up files for branch '${sourceBranch}'. Please remove them manually.`, error);
-  }
+  // This part is tricky, as we can't delete a file from a branch that isn't checked out.
+  // For now, we will notify the user to delete the branch. A more advanced solution could
+  // involve creating a new commit on the target branch that removes the files.
+  console.log(`\nCleanup complete. You can now safely delete the '${sourceBranch}' branch.`);
+  console.log(`Note: The history files from '${sourceBranch}' are not deleted from the branch itself.`);
+
 }
 
 // --- Main execution ---

@@ -1,16 +1,73 @@
 [
   {
-    "sha": "HEAD",
+    "sha": "586bf40f60fb9a460db5740c194d28bb8f04d218",
     "author": "BetoHerbas",
     "commit": {
       "date": "2025-11-11T02:46:31.000Z",
       "message": "MAIN first commit",
-      "url": "https://github.com/luzhania/TDDLabBaseProject/commit/HEAD"
+      "url": "https://github.com/luzhania/TDDLabBaseProject/commit/586bf40f60fb9a460db5740c194d28bb8f04d218"
     },
     "stats": {
       "total": 298,
       "additions": 265,
       "deletions": 33,
+      "date": "2025-11-11"
+    },
+    "coverage": 100,
+    "test_count": 1,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "41353a624c1baf1e7f1c3c41338dccd5cfd73115",
+    "author": "BetoHerbas",
+    "commit": {
+      "date": "2025-11-11T02:50:09.000Z",
+      "message": "B1 first commit",
+      "url": "https://github.com/BetoHerbas/baseProjectTestBranches2/commit/41353a624c1baf1e7f1c3c41338dccd5cfd73115"
+    },
+    "stats": {
+      "total": 28,
+      "additions": 28,
+      "deletions": 0,
+      "date": "2025-11-11"
+    },
+    "coverage": 100,
+    "test_count": 1,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "586bf40f60fb9a460db5740c194d28bb8f04d218",
+    "author": "BetoHerbas",
+    "commit": {
+      "date": "2025-11-11T02:51:50.000Z",
+      "message": "B1 commit 2",
+      "url": "https://github.com/BetoHerbas/baseProjectTestBranches2/commit/586bf40f60fb9a460db5740c194d28bb8f04d218"
+    },
+    "stats": {
+      "total": 34,
+      "additions": 34,
+      "deletions": 0,
+      "date": "2025-11-11"
+    },
+    "coverage": 100,
+    "test_count": 1,
+    "failed_tests": 0,
+    "conclusion": "success"
+  },
+  {
+    "sha": "HEAD",
+    "author": "BetoHerbas",
+    "commit": {
+      "date": "2025-11-11T03:13:50.000Z",
+      "message": "MAIN commit merge",
+      "url": "https://github.com/BetoHerbas/baseProjectTestBranches2/commit/HEAD"
+    },
+    "stats": {
+      "total": 123,
+      "additions": 100,
+      "deletions": 23,
       "date": "2025-11-11"
     },
     "coverage": 100,
