@@ -24,9 +24,47 @@
     "testId": 0
   },
   {
-    "commitId": "HEAD",
+    "commitId": "41353a624c1baf1e7f1c3c41338dccd5cfd73115",
     "commitName": "B1 first commit",
     "commitTimestamp": 1762829409455,
     "testId": 0
+  },
+  {
+    "numPassedTests": 0,
+    "failedTests": 1,
+    "numTotalTests": 1,
+    "timestamp": 1762829420712,
+    "success": false,
+    "testId": 1
+  },
+  {
+    "numPassedTests": 0,
+    "failedTests": 1,
+    "numTotalTests": 1,
+    "timestamp": 1762829422692,
+    "success": false,
+    "testId": 1
+  },
+  {
+    "numPassedTests": 1,
+    "failedTests": 0,
+    "numTotalTests": 1,
+    "timestamp": 1762829428969,
+    "success": true,
+    "testId": 1
+  },
+  {
+    "numPassedTests": 1,
+    "failedTests": 0,
+    "numTotalTests": 1,
+    "timestamp": 1762829430612,
+    "success": true,
+    "testId": 1
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "B1 commit 2",
+    "commitTimestamp": 1762829510511,
+    "testId": 1
   }
 ]
