@@ -1,11 +1,12 @@
 import fs from "fs";
-import { execSync, exec } from "child_process";
+import { execSync } from "child_process";
 import { tmpdir } from "os";
 import path from "path";
 import crypto from "crypto";
+import { getHistoryFilePaths } from "./branch-utils.js";
 
-const DATA_FILE = "script/commit-history.json";
 const HEAD_MARKER = "HEAD";
+const { commitHistory: DATA_FILE } = getHistoryFilePaths();
 
 function getCommitInfo(sha) {
   let commitMessage, commitDate, author;
@@ -64,7 +65,7 @@ function getCommitInfo(sha) {
     }
 
     try {
-      // Excluir commit-history.json al obtener las estadísticas del diff
+      // Excluir el historial de la rama actual al obtener las estadísticas del diff
       const diffStats = execSync(
         `git diff --stat ${parentRef} ${gitSha} -- ":!${DATA_FILE}"`
       ).toString();
@@ -206,13 +207,17 @@ function saveCommitData(commitData) {
   const headIndex = commits.findIndex((c) => c.sha === HEAD_MARKER);
   if (headIndex >= 0) {
     // Obtener el SHA del commit anterior (que antes era HEAD)
-    const currentSha = execSync("git rev-parse HEAD~1").toString().trim();
-
-    // Actualizar el registro con el SHA real
-    commits[headIndex].sha = currentSha;
-    if (commits[headIndex].commit.url && currentSha) {
-      const baseUrl = commits[headIndex].commit.url.split("/commit/")[0];
-      commits[headIndex].commit.url = `${baseUrl}/commit/${currentSha}`;
+    try {
+      const currentSha = execSync("git rev-parse HEAD~1").toString().trim();
+      // Actualizar el registro con el SHA real
+      commits[headIndex].sha = currentSha;
+      if (commits[headIndex].commit.url && currentSha) {
+        const baseUrl = commits[headIndex].commit.url.split("/commit/")[0];
+        commits[headIndex].commit.url = `${baseUrl}/commit/${currentSha}`;
+      }
+    } catch(e) {
+      // Probablemente el primer commit, no hay HEAD~1
+      commits.splice(headIndex, 1); // Eliminar el marcador HEAD si no se puede resolver
     }
   }
 
