@@ -3,6 +3,36 @@
     "numPassedTests": 0,
     "failedTests": 1,
     "numTotalTests": 1,
+    "timestamp": 1762829150618,
+    "success": false,
+    "testId": 0
+  },
+  {
+    "numPassedTests": 1,
+    "failedTests": 0,
+    "numTotalTests": 1,
+    "timestamp": 1762829158351,
+    "success": true,
+    "testId": 0
+  },
+  {
+    "numPassedTests": 1,
+    "failedTests": 0,
+    "numTotalTests": 1,
+    "timestamp": 1762829173039,
+    "success": true,
+    "testId": 0
+  },
+  {
+    "commitId": "586bf40f60fb9a460db5740c194d28bb8f04d218",
+    "commitName": "MAIN first commit",
+    "commitTimestamp": 1762829191565,
+    "testId": 0
+  },
+  {
+    "numPassedTests": 0,
+    "failedTests": 1,
+    "numTotalTests": 1,
     "timestamp": 1762829381733,
     "success": false,
     "testId": 0
@@ -62,9 +92,27 @@
     "testId": 1
   },
   {
-    "commitId": "HEAD",
+    "commitId": "1767c4457d5137c468840f5a516e7ffc884286c1",
     "commitName": "B1 commit 2",
     "commitTimestamp": 1762829510511,
     "testId": 1
+  },
+  {
+    "commitId": "586bf40f60fb9a460db5740c194d28bb8f04d218",
+    "commitName": "B1 commit 2",
+    "commitTimestamp": 1762829510511,
+    "testId": 1
+  },
+  {
+    "commitId": "1767c4457d5137c468840f5a516e7ffc884286c1",
+    "commitName": "MAIN commit merge",
+    "commitTimestamp": 1762830830831,
+    "testId": 2
+  },
+  {
+    "commitId": "HEAD",
+    "commitName": "Merge main a B1",
+    "commitTimestamp": 1762831244677,
+    "testId": 3
   }
 ]
